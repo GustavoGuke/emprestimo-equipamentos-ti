@@ -21,12 +21,17 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import React from "react";
+import { db } from "../lib/prisma";
+import { equipamentoCreate, getEquipamento } from "../data/getdata/equipamento";
+import { get } from "http";
 
 
 const formSchema = z.object({
     equipamento: z.string().min(2, { message: "Nome é obrigatório" }),
     name: z.string().min(2, { message: "Nome é obrigatório" }),
     dpto: z.string().min(2, { message: "Departamento é obrigatório" }),
+    responsavel: z.string().min(2, { message: "Responsável é obrigatório" }),
+    identificacao: z.string().min(2, { message: "Identificação é obrigatório" }),
 })
 
 const departamentos = [
@@ -42,29 +47,41 @@ const departamentos = [
     { value: "QUALIDADE", label: "QUALIDADE" },
 ]
 
+const responsaveis = [
+    { value: "Gustavo", label: "Gustavo" },
+    { value: "Jairo", label: "Jairo" },
+    { value: "Thiago", label: "Thiago" },
+    { value: "Fillipe", label: "Fillipe" },
+]
 
 
 
-
-export function NovoEquipamento() {
-    const [equipamentos, setEquipamentos] = React.useState([
-        { value: "HEADSEAT", label: "HEADSET", qtde: 1 },
-        { value: "CAMERA", label: "CAMERA", qtde: 2 },
-        { value: "ETIQUETADORA", label: "ETIQUETADORA", qtde: 1 },
-    ]);
+export function NovoEquipamento({getEquipamentos}:any) {
     const [open, setOpen] = React.useState(false);
+    
+
+    const equipamentos = getEquipamentos.map((equipamento) => {
+        return {
+            value: equipamento.nome,
+            label: equipamento.nome,
+            quantidade: equipamento.quantidade
+
+        }})
+    
     const [newEquipmentName, setNewEquipmentName] = React.useState("");
     const [newQuantity, setNewQuantity] = React.useState(0);
-    const equipamentosQtde = equipamentos.filter(e => e.qtde > 0)
+    
 
-    const addNewEquipment = (newEquipmentName: string, newQuantity: number) => {
+    const equipamentosQtde = equipamentos.filter(e => e.quantidade > 0)
+
+    const  addNewEquipment = async (newEquipmentName: string, newQuantity: number) => {
         const newEquipment = {
-            value: newEquipmentName.toUpperCase(),
-            label: newEquipmentName.toUpperCase(),
-            qtde: newQuantity
+            nome: newEquipmentName.toUpperCase(),
+            quantidade: newQuantity
         };
 
-        setEquipamentos([...equipamentos, newEquipment]);
+        const res = await equipamentoCreate(newEquipment)
+        console.log("retornou",res)
         setOpen(false);
         setNewEquipmentName("");
         setNewQuantity(0);
@@ -130,6 +147,20 @@ export function NovoEquipamento() {
                             />
                             <FormField
                                 control={form.control}
+                                name="identificacao"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Identificação do Equipamento</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="equipamento 01" {...field} />
+                                        </FormControl>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
@@ -169,6 +200,33 @@ export function NovoEquipamento() {
                                     </FormItem>
                                 )}
                             />
+                            <FormField
+                                control={form.control}
+                                name="responsavel"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Responsável</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Selecione o Responsável" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {
+                                                    responsaveis.map((option) => {
+                                                        return (
+                                                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                                        )
+                                                    })
+                                                }
+                                            </SelectContent>
+                                        </Select>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <DialogFooter>
                                 <Button type="submit" className="bg-green-700">Emprestar</Button>
                             </DialogFooter>
@@ -196,6 +254,7 @@ export function NovoEquipamento() {
                                             value={newQuantity}
                                             onChange={(e) => setNewQuantity(Number(e.target.value))}
                                         />
+                                     
                                         <div className="flex justify-between mt-2">
                                             <Button type="button" onClick={() => addNewEquipment(newEquipmentName, newQuantity)} className="bg-green-700">Salvar</Button>
                                             <Button type="button" className="bg-red-500" onClick={() => setOpen(false)}>Cancelar</Button>

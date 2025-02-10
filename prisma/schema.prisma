@@ -19,7 +19,6 @@ model Equipamento {
   nome         String
   quantidade   Int           // Quantidade total disponível para empréstimo
   criadoEm     DateTime      @default(now())
-  identificador String
   emprestimos  Emprestimo[]  // Relação com os empréstimos realizados
 }
 
@@ -29,6 +28,7 @@ model Emprestimo {
   departamento           String      // Departamento do usuário
   dataEmprestimo         DateTime    @default(now()) // Data do empréstimo (inserida automaticamente)
   responsavelEmprestimo  String      // Nome da pessoa do TI que realizou o empréstimo
+  identificacaoEquipamento String?      // Identificação do equipamento emprestado
 
   // Campos de devolução
   devolvido              Boolean     @default(false)  // Indica se o equipamento foi devolvido

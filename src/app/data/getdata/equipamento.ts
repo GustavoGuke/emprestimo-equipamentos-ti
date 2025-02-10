@@ -1,4 +1,6 @@
+"use server"
 import { db } from "@/app/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export async function getEquipamento() {
     const equipamento = await db.equipamento.findMany();
@@ -6,9 +8,12 @@ export async function getEquipamento() {
 }
 
 export async function equipamentoCreate(data: any){
+    console.log("enviado=> ",data)
     const equipamento = await db.equipamento.create({
-        data: data
+        data: {...data}
     })
+    console.log("enviado=> ",equipamento)
+    revalidatePath("Home")
     return equipamento;
 }
 
