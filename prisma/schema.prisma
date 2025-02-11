@@ -24,6 +24,7 @@ model Equipamento {
 
 model Emprestimo {
   id                     Int         @id @default(autoincrement())
+  nomeEquipamento        String // Relação com o equipamento emprestado
   usuario                String      // Nome do usuário que solicitou o empréstimo
   departamento           String      // Departamento do usuário
   dataEmprestimo         DateTime    @default(now()) // Data do empréstimo (inserida automaticamente)

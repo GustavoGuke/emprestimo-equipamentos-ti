@@ -1,14 +1,37 @@
+"use server";
 import { db } from "@/app/lib/prisma";
+import { debitaQuantidade } from "./equipamento";
 
 export async function emprestimo() {
-    const data = await db.emprestimo.findMany();
+    const data = await db.emprestimo.findMany({
+        where: {
+            devolvido: false,
+        }
+    });
     return data;
 }
 
-export async function emprestimoCreatee(data: any) {
+export async function emprestimoCreatee(dataEmprestimo: any) {
+    const create = {
+        nomeEquipamento: dataEmprestimo.nomeEquipamento,
+        usuario: dataEmprestimo.usuario,
+        departamento: dataEmprestimo.departamento,
+        responsavelEmprestimo: dataEmprestimo.responsavelEmprestimo,
+        identificacaoEquipamento: dataEmprestimo.identificacao,
+    }
     const dataCreate = await db.emprestimo.create({
-        data: data,
+        data: {
+            ...create,
+            dataEmprestimo:new Date(),
+            equipamento: {
+                connect: {
+                    id: dataEmprestimo.equipamentoId,
+                }
+            }
+        },
     });
+    console.log("inserção",dataCreate);
+    await debitaQuantidade(dataEmprestimo.equipamentoId);
     return dataCreate;
 }
 

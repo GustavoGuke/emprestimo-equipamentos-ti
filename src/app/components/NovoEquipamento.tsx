@@ -10,7 +10,6 @@ import { z } from "zod"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -21,20 +20,21 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import React from "react";
-import { db } from "../lib/prisma";
-import { equipamentoCreate, getEquipamento } from "../data/getdata/equipamento";
-import { get } from "http";
+
+import { equipamentoCreate} from "../data/getdata/equipamento";
+import { emprestimoCreatee } from "../data/getdata/emprestimo";
 
 
 const formSchema = z.object({
-    equipamento: z.string().min(2, { message: "Nome é obrigatório" }),
-    name: z.string().min(2, { message: "Nome é obrigatório" }),
-    dpto: z.string().min(2, { message: "Departamento é obrigatório" }),
-    responsavel: z.string().min(2, { message: "Responsável é obrigatório" }),
+    nomeEquipamento: z.string().min(2, { message: "Nome é obrigatório" }),
+    usuario: z.string().min(2, { message: "Nome é obrigatório" }),
+    departamento: z.string().min(2, { message: "Departamento é obrigatório" }),
+    responsavelEmprestimo: z.string().min(2, { message: "Responsável é obrigatório" }),
     identificacao: z.string().min(2, { message: "Identificação é obrigatório" }),
 })
 
 const departamentos = [
+    { value: "DP", label: "DP" },
     { value: "COMPRAS", label: "COMPRAS" },
     { value: "COMERCIAL", label: "COMERCIAL" },
     { value: "DIRETORIA", label: "DIRETORIA" },
@@ -44,6 +44,7 @@ const departamentos = [
     { value: "MANUTENÇÃO", label: "MANUTENÇÃO" },
     { value: "PCP", label: "PCP" },
     { value: "PRODUCAO", label: "PRODUCAO" },
+    { value: "RS", label: "RS" },
     { value: "QUALIDADE", label: "QUALIDADE" },
 ]
 
@@ -64,7 +65,8 @@ export function NovoEquipamento({getEquipamentos}:any) {
         return {
             value: equipamento.nome,
             label: equipamento.nome,
-            quantidade: equipamento.quantidade
+            quantidade: equipamento.quantidade,
+            id: equipamento.id
 
         }})
     
@@ -90,16 +92,34 @@ export function NovoEquipamento({getEquipamentos}:any) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            equipamento: "",
-            name: "",
-            dpto: ""
+            nomeEquipamento: "",
+            usuario: "",
+            departamento: "",
+            responsavelEmprestimo: "",
+            identificacao: "",
+
         }
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log({ ...values, data: new Date() })
+        console.log({ ...values })
+        const equipamentoId = equipamentosQtde.find(e => e.value === values.nomeEquipamento)?.id
+        const novoEmprestimo = {
+            nomeEquipamento: values.nomeEquipamento.toLocaleUpperCase(),
+            usuario: values.usuario.toLocaleUpperCase(),
+            departamento: values.departamento.toLocaleUpperCase(),
+            responsavelEmprestimo: values.responsavelEmprestimo.toLocaleUpperCase(),
+            identificacao: values.identificacao.toLocaleUpperCase(),
+            equipamentoId: Number(equipamentoId),
+        }
+        console.log("novoEmprestimo",novoEmprestimo)
+        const res = await emprestimoCreatee(novoEmprestimo)
+        console.log("retornou",res)
+        setOpen(false);
+        form.reset();
+
     }
     return (
         <Dialog>
@@ -120,7 +140,7 @@ export function NovoEquipamento({getEquipamentos}:any) {
 
                             <FormField
                                 control={form.control}
-                                name="equipamento"
+                                name="nomeEquipamento"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Equipamento</FormLabel>
@@ -161,7 +181,7 @@ export function NovoEquipamento({getEquipamentos}:any) {
                             />
                             <FormField
                                 control={form.control}
-                                name="name"
+                                name="usuario"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Nome</FormLabel>
@@ -175,7 +195,7 @@ export function NovoEquipamento({getEquipamentos}:any) {
                             />
                             <FormField
                                 control={form.control}
-                                name="dpto"
+                                name="departamento"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Departamento</FormLabel>
@@ -202,7 +222,7 @@ export function NovoEquipamento({getEquipamentos}:any) {
                             />
                             <FormField
                                 control={form.control}
-                                name="responsavel"
+                                name="responsavelEmprestimo"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Responsável</FormLabel>

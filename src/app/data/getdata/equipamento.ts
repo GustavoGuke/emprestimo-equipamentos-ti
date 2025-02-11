@@ -17,6 +17,23 @@ export async function equipamentoCreate(data: any){
     return equipamento;
 }
 
+export async function debitaQuantidade(id: number){
+    try {
+        await db.equipamento.update({
+            where: {
+                id: id
+            },
+            data: {
+                quantidade: {
+                    decrement: 1
+                }
+            }
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export async function equipamentoUpdate(id: number, data: any){
     const equipamento = await db.equipamento.update({
         where: {
