@@ -51,7 +51,13 @@ const responsaveis = [
     { value: "Fillipe", label: "Fillipe" },
 ]
 
-
+type FormSchema = z.infer<typeof formSchema>;
+interface NovoEquipamentoProps {
+    getEquipamentos?: any;
+    isOpen?: boolean;
+    defaultValues?: FormSchema;
+    setIsOpen?: (isOpen: boolean) => void;
+}
 
 interface Equipamento {
     id: number;
@@ -61,7 +67,7 @@ interface Equipamento {
     quantidade: number;
 }
 
-export function NovoEquipamento({getEquipamentos}: any) {
+export function EditarEmprestimo({getEquipamentos, defaultValues, isOpen, setIsOpen}:NovoEquipamentoProps ) {
     
     const equipamentos = getEquipamentos?.map((equipamento: Equipamento) => {
         return {
@@ -75,7 +81,7 @@ export function NovoEquipamento({getEquipamentos}: any) {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
+        defaultValues: defaultValues ?? {
             nomeEquipamento: "",
             usuario: "",
             departamento: "",

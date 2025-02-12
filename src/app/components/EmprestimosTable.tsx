@@ -1,3 +1,4 @@
+
 import { Edit, Undo } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -8,6 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table"
+import { EditarEmprestimo } from "./EditarEmprestimo";
+
+
 
 const columns = [
   {
@@ -29,6 +33,7 @@ const columns = [
   {
     accessorKey: "data",
     header: "Data"
+
   },
   {
     accessorKey: "",
@@ -38,16 +43,33 @@ const columns = [
 
 const formatarData = (data: string | Date) => {
   return new Intl.DateTimeFormat("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
   }).format(new Date(data));
 };
 
-export function EmprestimosTable({ data }) {
+interface EmprestimosTableProps {
+
+  id: number;
+  nomeEquipamento: string;
+  usuario: string;
+  departamento: string;
+  responsavelEmprestimo: string;
+  dataEmprestimo: Date;
+  identificacaoEquipamento: string | null;
+  devolvido: boolean;
+  dataDevolucao: Date | null;
+  responsavelDevolucao: string | null;
+  equipamentoId: number;
+
+}
+
+export async function EmprestimosTable({ getEmprestimos }: any) {
+  
   return (
     <div className="rounded-md border">
       <Table>
@@ -59,7 +81,7 @@ export function EmprestimosTable({ data }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((emprestimo) => (
+          {getEmprestimos.map((emprestimo: EmprestimosTableProps) => (
             <TableRow key={emprestimo.id}>
               <TableCell>{emprestimo.nomeEquipamento}</TableCell>
               <TableCell>{emprestimo.identificacaoEquipamento}</TableCell>
@@ -67,8 +89,8 @@ export function EmprestimosTable({ data }) {
               <TableCell>{emprestimo.departamento}</TableCell>
               <TableCell>{formatarData(emprestimo.dataEmprestimo)}</TableCell>
               <TableCell className="flex gap-2">
-              <Button variant="outline" className="bg-green-700 text-gray-50"> <Undo/> Devolver</Button>
-              <Button variant="outline" className="bg-orange-700 text-gray-50"> <Edit/></Button>
+                <EditarEmprestimo />
+                <Button variant="outline" className="bg-orange-700 text-gray-50"> <Edit /></Button>
               </TableCell>
             </TableRow>
           ))}

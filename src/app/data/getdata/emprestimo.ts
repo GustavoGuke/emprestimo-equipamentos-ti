@@ -3,12 +3,17 @@ import { db } from "@/app/lib/prisma";
 import { debitaQuantidade } from "./equipamento";
 
 export async function emprestimo() {
-    const data = await db.emprestimo.findMany({
-        where: {
-            devolvido: false,
-        }
-    });
-    return data;
+    
+    try {
+        const data = await db.emprestimo.findMany({
+            where: {
+                devolvido: false,
+            }
+        });
+        return data;
+    } catch (error) {
+        return [];
+    }   
 }
 
 export async function emprestimoCreatee(dataEmprestimo: any) {
@@ -22,7 +27,7 @@ export async function emprestimoCreatee(dataEmprestimo: any) {
     const dataCreate = await db.emprestimo.create({
         data: {
             ...create,
-            dataEmprestimo:new Date(),
+            dataEmprestimo: new Date(),
             equipamento: {
                 connect: {
                     id: dataEmprestimo.equipamentoId,
@@ -30,7 +35,7 @@ export async function emprestimoCreatee(dataEmprestimo: any) {
             }
         },
     });
-    console.log("inserção",dataCreate);
+    console.log("inserção", dataCreate);
     await debitaQuantidade(dataEmprestimo.equipamentoId);
     return dataCreate;
 }
