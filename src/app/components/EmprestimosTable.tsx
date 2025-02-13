@@ -1,5 +1,5 @@
 
-import { Edit, Undo } from "lucide-react";
+import { Edit, Undo, Undo2 } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   Table,
@@ -36,7 +36,11 @@ const columns = [
 
   },
   {
-    accessorKey: "",
+    accessorKey: "responsavel",
+    header: "Responsável"
+  },
+  {
+    accessorKey: "acao",
     header: "Ações"
   }
 ]
@@ -60,7 +64,7 @@ interface EmprestimosTableProps {
   departamento: string;
   responsavelEmprestimo: string;
   dataEmprestimo: Date;
-  identificacaoEquipamento: string | null;
+  identificacaoEquipamento: string | undefined;
   devolvido: boolean;
   dataDevolucao: Date | null;
   responsavelDevolucao: string | null;
@@ -68,7 +72,7 @@ interface EmprestimosTableProps {
 
 }
 
-export async function EmprestimosTable({ getEmprestimos }: any) {
+export async function EmprestimosTable({ getEmprestimos, equipamentos }: any) {
   
   return (
     <div className="rounded-md border">
@@ -88,9 +92,10 @@ export async function EmprestimosTable({ getEmprestimos }: any) {
               <TableCell>{emprestimo.usuario}</TableCell>
               <TableCell>{emprestimo.departamento}</TableCell>
               <TableCell>{formatarData(emprestimo.dataEmprestimo)}</TableCell>
+              <TableCell>{emprestimo.responsavelEmprestimo}</TableCell>
               <TableCell className="flex gap-2">
-                <EditarEmprestimo />
-                <Button variant="outline" className="bg-orange-700 text-gray-50"> <Edit /></Button>
+                <Button variant="outline" className="bg-gray-700 text-gray-50 hover:bg-gray-400"> <Undo2 /></Button>
+                <EditarEmprestimo equipamento={equipamentos} {...emprestimo} />
               </TableCell>
             </TableRow>
           ))}

@@ -15,10 +15,11 @@ import {
     FormMessage,
 } from "./ui/form"
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { emprestimoCreatee } from "../data/getdata/emprestimo";
 import ModalNovoEquipamento from "./ModalNovoEquipamento";
+import { departamentos, responsaveis } from "../utils/modelosOptions";
+import { Equipamento, filtrarEquipamentoComQuantidade, formatarEquipamentos } from "../utils/formatarEquipamentos";
 
 
 const formSchema = z.object({
@@ -29,49 +30,14 @@ const formSchema = z.object({
     identificacao: z.string().min(2, { message: "Identificação é obrigatório" }),
 })
 
-const departamentos = [
-    { value: "DP", label: "DP" },
-    { value: "COMPRAS", label: "COMPRAS" },
-    { value: "COMERCIAL", label: "COMERCIAL" },
-    { value: "DIRETORIA", label: "DIRETORIA" },
-    { value: "ENGENHARIA", label: "ENGENHARIA" },
-    { value: "EXPEDICAO", label: "EXPEDICAO" },
-    { value: "FINANCEIRO", label: "FINANCEIRO" },
-    { value: "MANUTENÇÃO", label: "MANUTENÇÃO" },
-    { value: "PCP", label: "PCP" },
-    { value: "PRODUCAO", label: "PRODUCAO" },
-    { value: "RS", label: "RS" },
-    { value: "QUALIDADE", label: "QUALIDADE" },
-]
-
-const responsaveis = [
-    { value: "Gustavo", label: "Gustavo" },
-    { value: "Jairo", label: "Jairo" },
-    { value: "Thiago", label: "Thiago" },
-    { value: "Fillipe", label: "Fillipe" },
-]
 
 
 
-interface Equipamento {
-    id: number;
-    nome?: string;
-    label?: string;
-    value: string
-    quantidade: number;
-}
 
 export function NovoEquipamento({getEquipamentos}: any) {
     
-    const equipamentos = getEquipamentos?.map((equipamento: Equipamento) => {
-        return {
-            value: equipamento.nome,
-            label: equipamento.nome,
-            quantidade: equipamento.quantidade,
-            id: equipamento.id
-
-        }})
-    const equipamentosQtde = equipamentos?.filter((equipamento: Equipamento )=> equipamento.quantidade > 0)
+    const equipamentosFormatados = formatarEquipamentos(getEquipamentos)
+    const equipamentosQtde = filtrarEquipamentoComQuantidade(equipamentosFormatados)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

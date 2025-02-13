@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { set, useForm } from "react-hook-form"
 import { z } from "zod"
 import {
     Form,
@@ -15,10 +15,13 @@ import {
     FormMessage,
 } from "./ui/form"
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { emprestimoCreatee } from "../data/getdata/emprestimo";
-import ModalNovoEquipamento from "./ModalNovoEquipamento";
+import { emprestimoCreatee, emprestimoUpdateIdIgual, emprestimoUpdateIdDiferente } from "../data/getdata/emprestimo";
+import { departamentos, responsaveis } from "../utils/modelosOptions";
+import { Equipamento, filtrarEquipamentoComQuantidade, formatarEquipamentos } from "../utils/formatarEquipamentos";
+import { Edit } from "lucide-react";
+
 
 
 const formSchema = z.object({
@@ -29,64 +32,38 @@ const formSchema = z.object({
     identificacao: z.string().min(2, { message: "Identificação é obrigatório" }),
 })
 
-const departamentos = [
-    { value: "DP", label: "DP" },
-    { value: "COMPRAS", label: "COMPRAS" },
-    { value: "COMERCIAL", label: "COMERCIAL" },
-    { value: "DIRETORIA", label: "DIRETORIA" },
-    { value: "ENGENHARIA", label: "ENGENHARIA" },
-    { value: "EXPEDICAO", label: "EXPEDICAO" },
-    { value: "FINANCEIRO", label: "FINANCEIRO" },
-    { value: "MANUTENÇÃO", label: "MANUTENÇÃO" },
-    { value: "PCP", label: "PCP" },
-    { value: "PRODUCAO", label: "PRODUCAO" },
-    { value: "RS", label: "RS" },
-    { value: "QUALIDADE", label: "QUALIDADE" },
-]
 
-const responsaveis = [
-    { value: "Gustavo", label: "Gustavo" },
-    { value: "Jairo", label: "Jairo" },
-    { value: "Thiago", label: "Thiago" },
-    { value: "Fillipe", label: "Fillipe" },
-]
-
-type FormSchema = z.infer<typeof formSchema>;
-interface NovoEquipamentoProps {
-    getEquipamentos?: any;
-    isOpen?: boolean;
-    defaultValues?: FormSchema;
-    setIsOpen?: (isOpen: boolean) => void;
-}
-
-interface Equipamento {
+interface EditarEmprestimoProps {
     id: number;
-    nome?: string;
-    label?: string;
-    value: string
-    quantidade: number;
+    nomeEquipamento: string;
+    usuario: string;
+    departamento: string;
+    responsavelEmprestimo: string;
+    dataEmprestimo: Date;
+    identificacaoEquipamento: string | undefined;
+    devolvido: boolean;
+    dataDevolucao: Date | null;
+    responsavelDevolucao: string | null;
+    equipamentoId: number;
+    equipamento: any;
 }
 
-export function EditarEmprestimo({getEquipamentos, defaultValues, isOpen, setIsOpen}:NovoEquipamentoProps ) {
-    
-    const equipamentos = getEquipamentos?.map((equipamento: Equipamento) => {
-        return {
-            value: equipamento.nome,
-            label: equipamento.nome,
-            quantidade: equipamento.quantidade,
-            id: equipamento.id
 
-        }})
-    const equipamentosQtde = equipamentos?.filter((equipamento: Equipamento )=> equipamento.quantidade > 0)
+
+export function EditarEmprestimo({ id, nomeEquipamento, usuario, departamento, responsavelEmprestimo, identificacaoEquipamento, equipamento }: EditarEmprestimoProps,) {
+    const [isOpen, setIsOpen] = React.useState(false);
+    const equipamentosFormatados = formatarEquipamentos(equipamento)
+    const equipamentosQtde = filtrarEquipamentoComQuantidade(equipamentosFormatados)
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: defaultValues ?? {
-            nomeEquipamento: "",
-            usuario: "",
-            departamento: "",
-            responsavelEmprestimo: "",
-            identificacao: "",
+        defaultValues: {
+            nomeEquipamento: nomeEquipamento,
+            identificacao: identificacaoEquipamento,
+            usuario: usuario,
+            departamento: departamento,
+            responsavelEmprestimo: responsavelEmprestimo.toString(),
 
         }
     })
@@ -94,24 +71,31 @@ export function EditarEmprestimo({getEquipamentos, defaultValues, isOpen, setIsO
     async function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log({ ...values })
+        
         const equipamentoId = equipamentosQtde.find((equipamento: Equipamento) => equipamento.value === values.nomeEquipamento)?.id
-        const novoEmprestimo = {
+        const formEmprestimo = {
             nomeEquipamento: values.nomeEquipamento.toLocaleUpperCase(),
             usuario: values.usuario.toLocaleUpperCase(),
             departamento: values.departamento.toLocaleUpperCase(),
             responsavelEmprestimo: values.responsavelEmprestimo.toLocaleUpperCase(),
             identificacao: values.identificacao.toLocaleUpperCase(),
-            equipamentoId: Number(equipamentoId),
         }
-        await emprestimoCreatee(novoEmprestimo)
+
+        if(id !== equipamentoId){
+            //await emprestimoUpdateIdDiferente(id, {...formEmprestimo, equipamentoId: Number(equipamentoId)})
+            console.log({...formEmprestimo, equipamentoId: Number(equipamentoId)})
+            form.reset();
+            setIsOpen(false)
+        }
+        await emprestimoUpdateIdIgual(id,formEmprestimo)
         form.reset();
+        setIsOpen(false)
 
     }
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="secondary">Emprestar equipamento +</Button>
+                <Button variant="secondary" className="bg-gray-700 text-gray-50 hover:bg-gray-400"><Edit /></Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
@@ -120,11 +104,10 @@ export function EditarEmprestimo({getEquipamentos, defaultValues, isOpen, setIsO
                         Insira as informações
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex justify-around">
+                <div>
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
-
                             <FormField
                                 control={form.control}
                                 name="nomeEquipamento"
@@ -139,7 +122,7 @@ export function EditarEmprestimo({getEquipamentos, defaultValues, isOpen, setIsO
                                             </FormControl>
                                             <SelectContent>
                                                 {
-                                                    equipamentosQtde.map((option:  Equipamento) => {
+                                                    equipamentosQtde.map((option: Equipamento) => {
                                                         return (
                                                             <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
                                                         )
@@ -152,6 +135,8 @@ export function EditarEmprestimo({getEquipamentos, defaultValues, isOpen, setIsO
                                     </FormItem>
                                 )}
                             />
+
+
                             <FormField
                                 control={form.control}
                                 name="identificacao"
@@ -189,7 +174,7 @@ export function EditarEmprestimo({getEquipamentos, defaultValues, isOpen, setIsO
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Selecione o Departamento" />
+                                                    <SelectValue placeholder={field.value} />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
@@ -207,6 +192,7 @@ export function EditarEmprestimo({getEquipamentos, defaultValues, isOpen, setIsO
                                     </FormItem>
                                 )}
                             />
+
                             <FormField
                                 control={form.control}
                                 name="responsavelEmprestimo"
@@ -216,7 +202,7 @@ export function EditarEmprestimo({getEquipamentos, defaultValues, isOpen, setIsO
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Selecione o Responsável" />
+                                                    <SelectValue placeholder="novo responsável " />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
@@ -235,12 +221,12 @@ export function EditarEmprestimo({getEquipamentos, defaultValues, isOpen, setIsO
                                 )}
                             />
                             <DialogFooter>
-                                <Button type="submit" className="bg-green-700">Emprestar</Button>
+                                <Button type="submit" className="bg-green-700">Alterar</Button>
                             </DialogFooter>
 
                         </form>
                     </Form>
-                    <ModalNovoEquipamento />
+
 
                 </div>
             </DialogContent>

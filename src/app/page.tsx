@@ -17,7 +17,7 @@ export default async function Home() {
         <NovoEquipamento getEquipamentos={getEquipamentos} />
         <div className="mt-10">
           <h1 className="text-2xl font-bold">Emprestados</h1>
-          <EmprestimosTable getEmprestimos={getEmprestimos} />
+          <EmprestimosTable getEmprestimos={getEmprestimos} equipamentos={getEquipamentos} />
         </div>
       </div>
     </div>
