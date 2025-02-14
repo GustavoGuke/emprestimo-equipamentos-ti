@@ -9,6 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip"
 import { EditarEmprestimo } from "./EditarEmprestimo";
 
 
@@ -73,7 +79,7 @@ interface EmprestimosTableProps {
 }
 
 export async function EmprestimosTable({ getEmprestimos, equipamentos }: any) {
-  
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -94,7 +100,16 @@ export async function EmprestimosTable({ getEmprestimos, equipamentos }: any) {
               <TableCell>{formatarData(emprestimo.dataEmprestimo)}</TableCell>
               <TableCell>{emprestimo.responsavelEmprestimo}</TableCell>
               <TableCell className="flex gap-2">
-                <Button variant="outline" className="bg-gray-700 text-gray-50 hover:bg-gray-400"> <Undo2 /></Button>
+                <TooltipProvider >
+                  <Tooltip >
+                    <TooltipTrigger asChild>
+                      <Button  variant="outline" className="bg-gray-700 text-gray-50 hover:bg-gray-400"> <Undo2 /></Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      Clique para devolver equipamento
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <EditarEmprestimo equipamento={equipamentos} {...emprestimo} />
               </TableCell>
             </TableRow>

@@ -4,7 +4,7 @@ import { debitaQuantidade, incrementaQuantidade } from "./equipamento";
 import { revalidatePath } from "next/cache";
 
 export async function emprestimo() {
-    
+
     try {
         const data = await db.emprestimo.findMany({
             where: {
@@ -14,7 +14,7 @@ export async function emprestimo() {
         return data;
     } catch (error) {
         return [];
-    }   
+    }
 }
 
 export async function emprestimoCreatee(dataEmprestimo: any) {
@@ -36,27 +36,26 @@ export async function emprestimoCreatee(dataEmprestimo: any) {
             }
         },
     });
-    
+
     await debitaQuantidade(dataEmprestimo.equipamentoId);
     revalidatePath("Home")
 }
 
 export async function emprestimoUpdateIdDiferente(id: number, data: any) {
-    try {
-        await db.emprestimo.update({
-            where: {
-                id: id,
-            },
-            data: data,
-        });
-    
-        await debitaQuantidade(data.equipamentoId);
-        await incrementaQuantidade(id);
-        revalidatePath("Home")
-    } catch (error) {
-        return error;
-    }
-    
+    console.log("fui para o banco", data);
+
+    const res = await db.emprestimo.update({
+        where: {
+            id: id,
+        },
+        data: { ...data },
+    });
+    console.log("passei para o banco", res);
+    await debitaQuantidade(data.equipamentoId);
+    await incrementaQuantidade(id);
+    revalidatePath("Home")
+
+
 }
 
 export async function emprestimoUpdateIdIgual(id: number, data: any) {
@@ -72,7 +71,7 @@ export async function emprestimoUpdateIdIgual(id: number, data: any) {
     } catch (error) {
         return error;
     }
-    
+
 }
 
 export async function emprestimoDelete(id: number) {

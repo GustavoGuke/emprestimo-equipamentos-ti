@@ -15,8 +15,8 @@ export const departamentos = [
 ]
 
 export const responsaveis = [
-    { value: "Gustavo", label: "Gustavo" },
-    { value: "Jairo", label: "Jairo" },
-    { value: "Thiago", label: "Thiago" },
-    { value: "Fillipe", label: "Fillipe" }
+    { value: "GUSTAVO", label: "GUSTAVO" },
+    { value: "JAIRO", label: "JAIRO" },
+    { value: "THIAGO", label: "THIAGO" },
+    { value: "FILLIPE", label: "FILLIPE" }
 ]

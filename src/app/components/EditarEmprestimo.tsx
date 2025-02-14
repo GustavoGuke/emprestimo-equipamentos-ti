@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { set, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { z } from "zod"
 import {
     Form,
@@ -15,13 +15,11 @@ import {
     FormMessage,
 } from "./ui/form"
 import { Input } from "./ui/input";
-
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { emprestimoCreatee, emprestimoUpdateIdIgual, emprestimoUpdateIdDiferente } from "../data/getdata/emprestimo";
+import { emprestimoUpdateIdIgual, emprestimoUpdateIdDiferente } from "../data/getdata/emprestimo";
 import { departamentos, responsaveis } from "../utils/modelosOptions";
-import { Equipamento, filtrarEquipamentoComQuantidade, formatarEquipamentos } from "../utils/formatarEquipamentos";
+import { Equipamento, formatarEquipamentos } from "../utils/formatarEquipamentos";
 import { Edit } from "lucide-react";
-
 
 
 const formSchema = z.object({
@@ -49,13 +47,10 @@ interface EditarEmprestimoProps {
 }
 
 
-
 export function EditarEmprestimo({ id, nomeEquipamento, usuario, departamento, responsavelEmprestimo, identificacaoEquipamento, equipamento }: EditarEmprestimoProps,) {
     const [isOpen, setIsOpen] = React.useState(false);
     const equipamentosFormatados = formatarEquipamentos(equipamento)
-    const equipamentosQtde = filtrarEquipamentoComQuantidade(equipamentosFormatados)
-
-
+    
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -67,23 +62,20 @@ export function EditarEmprestimo({ id, nomeEquipamento, usuario, departamento, r
 
         }
     })
-
+ 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        
-        const equipamentoId = equipamentosQtde.find((equipamento: Equipamento) => equipamento.value === values.nomeEquipamento)?.id
+     
+        const equipamentoId = equipamentosFormatados.find((equipamento: Equipamento) => equipamento.value === values.nomeEquipamento)?.id
         const formEmprestimo = {
             nomeEquipamento: values.nomeEquipamento.toLocaleUpperCase(),
             usuario: values.usuario.toLocaleUpperCase(),
             departamento: values.departamento.toLocaleUpperCase(),
             responsavelEmprestimo: values.responsavelEmprestimo.toLocaleUpperCase(),
-            identificacao: values.identificacao.toLocaleUpperCase(),
+            identificacaoEquipamento: values.identificacao.toLocaleUpperCase(),
         }
 
         if(id !== equipamentoId){
-            //await emprestimoUpdateIdDiferente(id, {...formEmprestimo, equipamentoId: Number(equipamentoId)})
-            console.log({...formEmprestimo, equipamentoId: Number(equipamentoId)})
+            await emprestimoUpdateIdDiferente(id, {...formEmprestimo, equipamentoId: Number(equipamentoId)})
             form.reset();
             setIsOpen(false)
         }
@@ -122,9 +114,10 @@ export function EditarEmprestimo({ id, nomeEquipamento, usuario, departamento, r
                                             </FormControl>
                                             <SelectContent>
                                                 {
-                                                    equipamentosQtde.map((option: Equipamento) => {
+                                                    equipamentosFormatados.map((option: Equipamento) => {
+                                                        const isDisabled = option.quantidade === 0
                                                         return (
-                                                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                                            <SelectItem key={option.value} value={option.value} disabled={isDisabled}>{option.label}</SelectItem>
                                                         )
                                                     })
                                                 }
@@ -226,8 +219,6 @@ export function EditarEmprestimo({ id, nomeEquipamento, usuario, departamento, r
 
                         </form>
                     </Form>
-
-
                 </div>
             </DialogContent>
         </Dialog>
