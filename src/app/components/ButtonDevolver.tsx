@@ -48,17 +48,7 @@ export default function ButtonDevolver({ id, nomeEquipamento, usuario, departame
 
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <TooltipProvider >
-                    <Tooltip >
-                        <TooltipTrigger asChild>
-                            {/* <Button  variant="outline" className="bg-gray-700 text-gray-50 hover:bg-gray-400"> <Undo2 /></Button> */}
-                            <Button variant="outline" className="bg-gray-700 text-gray-50 hover:bg-gray-400"> <Undo2 /></Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            Clique para devolver equipamento
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
+                <Button variant="outline" className="bg-gray-700 text-gray-50 hover:bg-gray-400"> <Undo2 /></Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>

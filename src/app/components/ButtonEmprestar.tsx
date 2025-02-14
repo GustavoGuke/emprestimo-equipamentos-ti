@@ -30,8 +30,8 @@ const formSchema = z.object({
     identificacao: z.string().min(2, { message: "Identificação é obrigatório" }),
 })
 
-export function NovoEquipamento({getEquipamentos}: any) {
-    
+export function NovoEquipamento({ getEquipamentos }: any) {
+
     const equipamentosFormatados = formatarEquipamentos(getEquipamentos)
     const equipamentosQtde = filtrarEquipamentoComQuantidade(equipamentosFormatados)
 
@@ -70,134 +70,138 @@ export function NovoEquipamento({getEquipamentos}: any) {
                 <Button variant="secondary">Emprestar equipamento +</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
-                <DialogHeader>
+                <DialogHeader >
                     <DialogTitle>Emprestar Equipamento</DialogTitle>
                     <DialogDescription className="flex items-end justify-between">
                         Insira as informações
-                        <ModalNovoEquipamento />
                     </DialogDescription>
                 </DialogHeader>
-                <div className="">
+                <div className="flex flex-col gap-2 " >
+                    <div className="text-end ">
+                        <ModalNovoEquipamento />
+                    </div>
 
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+                    <div>
+                        <Form {...form} >
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 border p-2 rounded-md">
 
-                            <FormField
-                                control={form.control}
-                                name="nomeEquipamento"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Equipamento</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormField
+                                    control={form.control}
+                                    name="nomeEquipamento"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Equipamento</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Selecione o Equipamento" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    {
+                                                        equipamentosQtde.map((option: Equipamento) => {
+                                                            return (
+                                                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                                            )
+                                                        })
+                                                    }
+                                                </SelectContent>
+                                            </Select>
+
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="identificacao"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Identificação do Equipamento</FormLabel>
                                             <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Selecione o Equipamento" />
-                                                </SelectTrigger>
+                                                <Input placeholder="equipamento 01" {...field} />
                                             </FormControl>
-                                            <SelectContent>
-                                                {
-                                                    equipamentosQtde.map((option:  Equipamento) => {
-                                                        return (
-                                                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                                                        )
-                                                    })
-                                                }
-                                            </SelectContent>
-                                        </Select>
 
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="identificacao"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Identificação do Equipamento</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="equipamento 01" {...field} />
-                                        </FormControl>
-
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="usuario"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Nome</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Nome do solicitante" {...field} />
-                                        </FormControl>
-
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="departamento"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Departamento</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="usuario"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Nome</FormLabel>
                                             <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Selecione o Departamento" />
-                                                </SelectTrigger>
+                                                <Input placeholder="Nome do solicitante" {...field} />
                                             </FormControl>
-                                            <SelectContent>
-                                                {
-                                                    departamentos.map((option) => {
-                                                        return (
-                                                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                                                        )
-                                                    })
-                                                }
-                                            </SelectContent>
-                                        </Select>
 
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="responsavelEmprestimo"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Responsável</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Selecione o Responsável" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {
-                                                    responsaveis.map((option) => {
-                                                        return (
-                                                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                                                        )
-                                                    })
-                                                }
-                                            </SelectContent>
-                                        </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="departamento"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Departamento</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Selecione o Departamento" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    {
+                                                        departamentos.map((option) => {
+                                                            return (
+                                                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                                            )
+                                                        })
+                                                    }
+                                                </SelectContent>
+                                            </Select>
 
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <DialogFooter>
-                                <Button type="submit" className="bg-green-700">Emprestar</Button>
-                            </DialogFooter>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="responsavelEmprestimo"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Responsável</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Selecione o Responsável" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    {
+                                                        responsaveis.map((option) => {
+                                                            return (
+                                                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                                            )
+                                                        })
+                                                    }
+                                                </SelectContent>
+                                            </Select>
 
-                        </form>
-                    </Form>
-                    
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <DialogFooter>
+                                    <Button type="submit" className="bg-green-700">Emprestar</Button>
+                                </DialogFooter>
+
+                            </form>
+                        </Form>
+                    </div>
+
 
                 </div>
             </DialogContent>

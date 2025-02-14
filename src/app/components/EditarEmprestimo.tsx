@@ -88,16 +88,7 @@ export function EditarEmprestimo({ id, nomeEquipamento, usuario, departamento, r
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button variant="secondary" className="bg-gray-700 text-gray-50 hover:bg-gray-400"><Edit /></Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            Ediar
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
+                <Button variant="secondary" className="bg-gray-700 text-gray-50 hover:bg-gray-400 "><Edit /></Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
