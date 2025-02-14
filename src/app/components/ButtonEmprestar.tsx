@@ -30,10 +30,6 @@ const formSchema = z.object({
     identificacao: z.string().min(2, { message: "Identificação é obrigatório" }),
 })
 
-
-
-
-
 export function NovoEquipamento({getEquipamentos}: any) {
     
     const equipamentosFormatados = formatarEquipamentos(getEquipamentos)
@@ -76,11 +72,12 @@ export function NovoEquipamento({getEquipamentos}: any) {
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
                     <DialogTitle>Emprestar Equipamento</DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className="flex items-end justify-between">
                         Insira as informações
+                        <ModalNovoEquipamento />
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex justify-around">
+                <div className="">
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
@@ -200,7 +197,7 @@ export function NovoEquipamento({getEquipamentos}: any) {
 
                         </form>
                     </Form>
-                    <ModalNovoEquipamento />
+                    
 
                 </div>
             </DialogContent>

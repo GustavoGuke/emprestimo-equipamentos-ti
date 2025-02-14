@@ -2,6 +2,7 @@
 import { db } from "@/app/lib/prisma";
 import { debitaQuantidade, incrementaQuantidade } from "./equipamento";
 import { revalidatePath } from "next/cache";
+import { formatarData, formatarDataInclusaoBanco } from "@/app/utils/formatarData";
 
 export async function emprestimo() {
 
@@ -28,7 +29,7 @@ export async function emprestimoCreatee(dataEmprestimo: any) {
     const dataCreate = await db.emprestimo.create({
         data: {
             ...create,
-            dataEmprestimo: new Date(),
+            dataEmprestimo: formatarDataInclusaoBanco(new Date()),
             equipamento: {
                 connect: {
                     id: dataEmprestimo.equipamentoId,
@@ -42,15 +43,15 @@ export async function emprestimoCreatee(dataEmprestimo: any) {
 }
 
 export async function emprestimoUpdateIdDiferente(id: number, data: any) {
-    console.log("fui para o banco", data);
+    
 
-    const res = await db.emprestimo.update({
+    await db.emprestimo.update({
         where: {
             id: id,
         },
-        data: { ...data },
+        data: {...data },
     });
-    console.log("passei para o banco", res);
+    
     await debitaQuantidade(data.equipamentoId);
     await incrementaQuantidade(id);
     revalidatePath("Home")
@@ -64,7 +65,7 @@ export async function emprestimoUpdateIdIgual(id: number, data: any) {
             where: {
                 id: id,
             },
-            data: data,
+            data: {...data},
         });
 
         revalidatePath("Home")
@@ -72,6 +73,17 @@ export async function emprestimoUpdateIdIgual(id: number, data: any) {
         return error;
     }
 
+}
+
+export async function devolverEquipamento(id:number, data: any){
+    await db.emprestimo.update({
+        where: {
+            id: id,
+        },
+        data: {...data},
+    });
+    await incrementaQuantidade(data.equipamentoId);
+    revalidatePath("Home")
 }
 
 export async function emprestimoDelete(id: number) {

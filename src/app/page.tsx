@@ -1,5 +1,5 @@
 import { Header } from "@/app/components/Header";
-import { NovoEquipamento } from "./components/NovoEquipamento";
+import { NovoEquipamento } from "./components/ButtonEmprestar";
 import { getEquipamento } from "./data/getdata/equipamento";
 import { emprestimo } from "./data/getdata/emprestimo";
 import { EmprestimosTable } from "./components/EmprestimosTable";
