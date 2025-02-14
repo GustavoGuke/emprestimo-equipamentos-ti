@@ -23,7 +23,7 @@ export default function ModalNovoEquipamento() {
         };
     return (
         <div>
-            <Button type="button" variant="secondary" onClick={() => setOpen(true)} className="bg-blue-400">Novo equipamento</Button>
+            <Button type="button" variant="secondary" onClick={() => setOpen(true)} className="bg-blue-400">Cadastrar equipamento</Button>
             {
                 open &&
                 <>

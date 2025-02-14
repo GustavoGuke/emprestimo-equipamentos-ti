@@ -20,6 +20,7 @@ import { emprestimoUpdateIdIgual, emprestimoUpdateIdDiferente } from "../data/ge
 import { departamentos, responsaveis } from "../utils/modelosOptions";
 import { Equipamento, formatarEquipamentos } from "../utils/formatarEquipamentos";
 import { Edit } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 
 const formSchema = z.object({
@@ -50,7 +51,7 @@ interface EditarEmprestimoProps {
 export function EditarEmprestimo({ id, nomeEquipamento, usuario, departamento, responsavelEmprestimo, identificacaoEquipamento, equipamento }: EditarEmprestimoProps,) {
     const [isOpen, setIsOpen] = React.useState(false);
     const equipamentosFormatados = formatarEquipamentos(equipamento)
-    
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -62,9 +63,9 @@ export function EditarEmprestimo({ id, nomeEquipamento, usuario, departamento, r
 
         }
     })
- 
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
-     
+
         const equipamentoId = equipamentosFormatados.find((equipamento: Equipamento) => equipamento.value === values.nomeEquipamento)?.id
         const formEmprestimo = {
             nomeEquipamento: values.nomeEquipamento.toLocaleUpperCase(),
@@ -74,12 +75,12 @@ export function EditarEmprestimo({ id, nomeEquipamento, usuario, departamento, r
             identificacaoEquipamento: values.identificacao.toLocaleUpperCase(),
         }
 
-        if(id !== equipamentoId){
-            await emprestimoUpdateIdDiferente(id, {...formEmprestimo, equipamentoId: Number(equipamentoId)})
+        if (id !== equipamentoId) {
+            await emprestimoUpdateIdDiferente(id, { ...formEmprestimo, equipamentoId: Number(equipamentoId) })
             form.reset();
             setIsOpen(false)
         }
-        await emprestimoUpdateIdIgual(id,formEmprestimo)
+        await emprestimoUpdateIdIgual(id, formEmprestimo)
         form.reset();
         setIsOpen(false)
 
@@ -87,7 +88,16 @@ export function EditarEmprestimo({ id, nomeEquipamento, usuario, departamento, r
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="secondary" className="bg-gray-700 text-gray-50 hover:bg-gray-400"><Edit /></Button>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button variant="secondary" className="bg-gray-700 text-gray-50 hover:bg-gray-400"><Edit /></Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            Ediar
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>

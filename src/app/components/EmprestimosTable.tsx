@@ -102,17 +102,10 @@ export async function EmprestimosTable({ getEmprestimos, equipamentos }: any) {
               <TableCell>{formatarData(emprestimo.dataEmprestimo)}</TableCell>
               <TableCell>{emprestimo.responsavelEmprestimo}</TableCell>
               <TableCell className="flex gap-2">
-                <TooltipProvider >
-                  <Tooltip >
-                    <TooltipTrigger asChild>
-                      {/* <Button  variant="outline" className="bg-gray-700 text-gray-50 hover:bg-gray-400"> <Undo2 /></Button> */}
-                      <ButtonDevolver {...emprestimo} />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      Clique para devolver equipamento
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+
+                {/* <Button  variant="outline" className="bg-gray-700 text-gray-50 hover:bg-gray-400"> <Undo2 /></Button> */}
+                <ButtonDevolver {...emprestimo} />
+
                 <EditarEmprestimo equipamento={equipamentos} {...emprestimo} />
               </TableCell>
             </TableRow>

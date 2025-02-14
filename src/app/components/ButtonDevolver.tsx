@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { devolverEquipamento } from "../data/getdata/emprestimo";
 import { formatarData, formatarDataInclusaoBanco } from "../utils/formatarData";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 const formSchema = z.object({
     responsavelEmprestimo: z.string().min(2, { message: "Responsável é obrigatório" }),
@@ -31,7 +32,7 @@ export default function ButtonDevolver({ id, nomeEquipamento, usuario, departame
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        
+
         const devolucao = {
             devolvido: true,
             dataDevolucao: formatarDataInclusaoBanco(new Date()),
@@ -47,7 +48,17 @@ export default function ButtonDevolver({ id, nomeEquipamento, usuario, departame
 
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="bg-gray-700 text-gray-50 hover:bg-gray-400"> <Undo2 /></Button>
+                <TooltipProvider >
+                    <Tooltip >
+                        <TooltipTrigger asChild>
+                            {/* <Button  variant="outline" className="bg-gray-700 text-gray-50 hover:bg-gray-400"> <Undo2 /></Button> */}
+                            <Button variant="outline" className="bg-gray-700 text-gray-50 hover:bg-gray-400"> <Undo2 /></Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            Clique para devolver equipamento
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
@@ -85,7 +96,7 @@ export default function ButtonDevolver({ id, nomeEquipamento, usuario, departame
                             />
                             <DialogFooter>
 
-                                <Button type="submit" className="bg-green-700"><DownloadIcon/> </Button>
+                                <Button type="submit" className="bg-green-700"><DownloadIcon /> </Button>
                             </DialogFooter>
 
                         </form>
