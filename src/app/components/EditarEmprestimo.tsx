@@ -20,7 +20,7 @@ import { emprestimoUpdateIdIgual, emprestimoUpdateIdDiferente } from "../data/ge
 import { departamentos, responsaveis } from "../utils/modelosOptions";
 import { Equipamento, formatarEquipamentos } from "../utils/formatarEquipamentos";
 import { Edit } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+
 
 
 const formSchema = z.object({

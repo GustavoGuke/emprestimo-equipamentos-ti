@@ -26,13 +26,3 @@ export const formatarDataInclusaoBanco = (data: string | Date) =>{
     // Retorna a data no formato "YYYY-MM-DD HH:mm:ss"
     return new Date(`${ano}-${mes}-${dia} ${horas}:${minutos}:${segundos}`);
 };
-// export const formatarDataInclusaoBanco = (data: string | Date) => {
-//     return new Intl.DateTimeFormat("pt-BR", {
-//         year: "numeric",
-//         month: "2-digit",
-//         day: "2-digit",
-//         hour: "2-digit",
-//         minute: "2-digit",
-//         second: "2-digit"
-//     }).format(new Date(data));
-// };

@@ -2,7 +2,7 @@
 import { db } from "@/app/lib/prisma";
 import { debitaQuantidade, incrementaQuantidade } from "./equipamento";
 import { revalidatePath } from "next/cache";
-import { formatarData, formatarDataInclusaoBanco } from "@/app/utils/formatarData";
+import { formatarDataInclusaoBanco } from "@/app/utils/formatarData";
 
 export async function emprestimo() {
 

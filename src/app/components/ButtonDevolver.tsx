@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import { DownloadIcon, Undo2 } from "lucide-react";
 import { EmprestimosTableProps } from "./EmprestimosTable";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
@@ -14,14 +12,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from "./ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { devolverEquipamento } from "../data/getdata/emprestimo";
-import { formatarData, formatarDataInclusaoBanco } from "../utils/formatarData";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import { formatarDataInclusaoBanco } from "../utils/formatarData";
 
 const formSchema = z.object({
     responsavelEmprestimo: z.string().min(2, { message: "Responsável é obrigatório" }),
 })
 
-export default function ButtonDevolver({ id, nomeEquipamento, usuario, departamento, responsavelEmprestimo, identificacaoEquipamento, equipamentoId }: EmprestimosTableProps) {
+export default function ButtonDevolver({ id, responsavelEmprestimo, equipamentoId }: EmprestimosTableProps) {
     const [isOpen, setIsOpen] = React.useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
