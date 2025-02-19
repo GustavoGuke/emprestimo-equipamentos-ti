@@ -6,6 +6,7 @@ import { EmprestimosTable } from "./components/EmprestimosTable";
 
 
 export default async function Home() {
+  const mostrarEquipamentos = false
   const getEquipamentos = await getEquipamento();
   const getEmprestimos = await emprestimo();
   

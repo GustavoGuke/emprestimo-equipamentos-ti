@@ -8,8 +8,8 @@ export async function emprestimo() {
 
     try {
         const data = await db.emprestimo.findMany({
-            where: {
-                devolvido: false,
+            orderBy: {
+                dataEmprestimo: "desc"
             }
         });
         return data;
