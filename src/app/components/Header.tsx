@@ -20,10 +20,10 @@ export function Header({ texto, icon, user }: HeaderProps) {
                     }
                     <h1 className="font-bold text-3xl">{texto}</h1>
                 </div>
-                <div className="flex ">
+                {/* <div className="flex ">
                     <User />
                     <h1>{user}</h1>
-                </div>
+                </div> */}
             </div>
         </header>
     )

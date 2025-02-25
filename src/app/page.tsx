@@ -12,7 +12,7 @@ export default async function Home() {
   
   return (
     <div className="max-w-7xl mx-auto p-16">
-      <Header texto="Equipamentos TI" user="Gustavo" />
+      <Header texto="Equipamentos TI" />
       
       <div className="mt-10">
         <NovoEquipamento getEquipamentos={getEquipamentos} />
