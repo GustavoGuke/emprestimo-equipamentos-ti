@@ -3,6 +3,7 @@ import { NovoEquipamento } from "./components/ButtonEmprestar";
 import { getEquipamento } from "./data/getdata/equipamento";
 import { emprestimo } from "./data/getdata/emprestimo";
 import { EmprestimosTable } from "./components/EmprestimosTable";
+import TelaPrincipal from "./components/TelaPrincipal";
 
 
 export default async function Home() {
@@ -15,11 +16,12 @@ export default async function Home() {
       <Header texto="Equipamentos TI" />
       
       <div className="mt-10">
-        <NovoEquipamento getEquipamentos={getEquipamentos} />
+        {/* <NovoEquipamento getEquipamentos={getEquipamentos} />
         <div className="mt-10">
           <h1 className="text-2xl font-bold">Emprestados</h1>
           <EmprestimosTable getEmprestimos={getEmprestimos} equipamentos={getEquipamentos} />
-        </div>
+        </div> */}
+        <TelaPrincipal getEquipamentos={getEquipamentos} getEmprestimos={getEmprestimos} />
       </div>
     </div>
   );
