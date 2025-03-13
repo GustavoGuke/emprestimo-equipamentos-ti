@@ -22,7 +22,14 @@ const columns = [
   }
 ]
 
-export function EquipamentosTable({ data }) {
+type Equipamento = {
+  id: number;
+  nome: string;
+  quantidade: number;
+}
+
+export function EquipamentosTable({ data }: { data: Equipamento[] }) {
+  console.log(data)
   return (
     <div className="rounded-md border">
       <Table>
@@ -35,10 +42,10 @@ export function EquipamentosTable({ data }) {
         </TableHeader>
         <TableBody>
           {data.map((item) => (
-            <TableRow key={item.value}>
-              <TableCell>{item.label}</TableCell>
-              <TableCell>{item.qtde}</TableCell>
-              <TableCell>{item.qtde > 0 ? "Disponível" : "Indisponível"}</TableCell>
+            <TableRow key={item.id}>
+              <TableCell>{item.nome}</TableCell>
+              <TableCell>{item.quantidade}</TableCell>
+              <TableCell>{item.quantidade > 0 ? "Disponível" : "Indisponível"}</TableCell>
             </TableRow>
           ))}
         </TableBody>

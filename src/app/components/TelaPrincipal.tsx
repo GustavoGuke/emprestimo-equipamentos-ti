@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { NovoEquipamento } from "./ButtonEmprestar";
 import { EmprestimosTable } from "./EmprestimosTable";
+import { EquipamentosTable } from "./EquipamentosTable";
 
 export default function TelaPrincipal({ getEquipamentos, getEmprestimos }: any) {
     const [mostrarEquipamentos, setMostrarEquipamentos] = useState(false);
@@ -34,11 +35,7 @@ export default function TelaPrincipal({ getEquipamentos, getEmprestimos }: any) 
 
                 {/* Alternando entre os Equipamentos e os Emprestados */}
                 {mostrarEquipamentos ? (
-                    <ul className="mt-4 bg-gray-100 p-4 rounded">
-                        {getEquipamentos.map((equip: any, index: number) => (
-                            <li key={index} className="border-b py-2">{equip.nome}</li>
-                        ))}
-                    </ul>
+                    <EquipamentosTable data={getEquipamentos} />
                 ) : (
                     <EmprestimosTable getEmprestimos={getEmprestimos} equipamentos={getEquipamentos} />
                 )}
