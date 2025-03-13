@@ -9,21 +9,23 @@ import { Equipamento } from "@prisma/client";
 
 
 type ModalNovoEquipamentoProps = {
-    initialEquipament?: Equipamento
+    id?: number;
+    nome?:string
+    quantidade?: number;
     onClose: () => void;
     onEquipamentUpdated?: (updateEquipament: Equipamento) => void;
 }
 
-export default function ModalNovoEquipamento({ initialEquipament, onClose, onEquipamentUpdated }: ModalNovoEquipamentoProps) {
+export default function ModalNovoEquipamento({ id,nome,quantidade, onClose, onEquipamentUpdated }: ModalNovoEquipamentoProps) {
     const [open, setOpen] = React.useState(false);
-    const [equipmentName, setEquipmentName] = React.useState(initialEquipament?.nome || "");
-    const [quantity, setQuantity] = React.useState(initialEquipament?.quantidade || 0);
+    const [equipmentName, setEquipmentName] = React.useState(nome || "");
+    const [quantity, setQuantity] = React.useState(quantidade || 0);
+    console.log(nome,quantidade)
 
     useEffect(() => {
-        
-        setEquipmentName(initialEquipament?.nome || "");
-        setQuantity(initialEquipament?.quantidade || 0);
-    }, [initialEquipament]);
+        setEquipmentName(nome || "");
+        setQuantity(quantidade || 0);
+    }, [nome, quantidade]);
 
     const handleSave = async () => {
         const equipamentData = {
@@ -33,8 +35,8 @@ export default function ModalNovoEquipamento({ initialEquipament, onClose, onEqu
 
         try {
             let res
-            if (initialEquipament) {
-                res = await equipamentoUpdate(initialEquipament.id, equipamentData)
+            if (nome || quantidade) {
+                res = await equipamentoUpdate(id!, equipamentData)
                 if (onEquipamentUpdated && res) {
                     onEquipamentUpdated(res);
                 }
@@ -65,7 +67,7 @@ export default function ModalNovoEquipamento({ initialEquipament, onClose, onEqu
     // };
     return (
         <div>
-            <Button type="button" variant="secondary" onClick={() => setOpen(true)} className="bg-blue-400 my-2 ">Cadastrar equipamento</Button>
+            <Button type="button" variant="secondary" onClick={() => setOpen(true)} className="bg-blue-400 my-2 ">{id ? "alterar": "Cadastrar equipamento"}</Button>
             {
                 open &&
                 <>

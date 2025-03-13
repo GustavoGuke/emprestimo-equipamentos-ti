@@ -1,4 +1,3 @@
-import { access } from "fs";
 import {
   Table,
   TableBody,
@@ -7,6 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table"
+import ModalNovoEquipamento from "./ModalNovoEquipamento";
+
 
 const columns = [
   {
@@ -34,8 +35,8 @@ type Equipamento = {
   disponivel: number;
 }
 
-export function EquipamentosTable({ data }: { data: Equipamento[] }) {
-  console.log(data)
+export function EquipamentosTable({ data }: any) {
+console.log(data)
   return (
     <div className="rounded-md border">
       <Table>
@@ -47,12 +48,12 @@ export function EquipamentosTable({ data }: { data: Equipamento[] }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item) => (
+          {data.map((item: Equipamento) => (
             <TableRow key={item.id}>
               <TableCell>{item.nome}</TableCell>
               <TableCell>{item.quantidade}</TableCell>
               <TableCell>{item.disponivel}</TableCell>
-              <TableCell>{item.quantidade > 0 ? "Disponível" : "Indisponível"}</TableCell>
+              <TableCell><ModalNovoEquipamento {...item}/></TableCell>
             </TableRow>
           ))}
         </TableBody>

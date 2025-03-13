@@ -14,9 +14,7 @@ export async function getEquipamento() {
     }
 }
 
-export async function equipamentoCreate(data: any){
-
-    
+export async function equipamentoCreate(data: any){    
     const equipamento = await db.equipamento.create({
         data: {...data, disponivel: data.quantidade},
     })
@@ -64,7 +62,13 @@ export async function equipamentoUpdate(id: number, data: any){
         where: {
             id: id
         },
-        data: data
+        data: {
+            ...data, 
+            disponivel:{
+                increment: data.quantidade
+            }
+        },
+        //data: data
     })
     return equipamento;
 }
