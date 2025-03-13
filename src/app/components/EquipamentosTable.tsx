@@ -1,3 +1,4 @@
+import { access } from "fs";
 import {
   Table,
   TableBody,
@@ -17,6 +18,10 @@ const columns = [
     header: "Quantidade"
   },
   {
+    accessorKey: "disponivel",
+    header: "Disponível"
+  },
+  {
     accessorKey: "status",
     header: "Status"
   }
@@ -26,6 +31,7 @@ type Equipamento = {
   id: number;
   nome: string;
   quantidade: number;
+  disponivel: number;
 }
 
 export function EquipamentosTable({ data }: { data: Equipamento[] }) {
@@ -45,6 +51,7 @@ export function EquipamentosTable({ data }: { data: Equipamento[] }) {
             <TableRow key={item.id}>
               <TableCell>{item.nome}</TableCell>
               <TableCell>{item.quantidade}</TableCell>
+              <TableCell>{item.disponivel}</TableCell>
               <TableCell>{item.quantidade > 0 ? "Disponível" : "Indisponível"}</TableCell>
             </TableRow>
           ))}

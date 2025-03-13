@@ -18,7 +18,7 @@ export async function equipamentoCreate(data: any){
 
     
     const equipamento = await db.equipamento.create({
-        data: {...data}
+        data: {...data, disponivel: data.quantidade},
     })
     
     revalidatePath("Home")
@@ -32,7 +32,7 @@ export async function debitaQuantidade(id: number){
                 id: id
             },
             data: {
-                quantidade: {
+                disponivel: {
                     decrement: 1
                 }
             }
@@ -49,7 +49,7 @@ export async function incrementaQuantidade(id: number){
                 id: id
             },
             data: {
-                quantidade: {
+                disponivel: {
                     increment: 1
                 }
             }

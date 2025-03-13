@@ -18,6 +18,7 @@ model Equipamento {
   id           Int           @id @default(autoincrement())
   nome         String
   quantidade   Int           // Quantidade total disponível para empréstimo
+  disponivel   Int           @default(0)// Quantidade disponível para empréstimo
   criadoEm     DateTime      @default(now())
   emprestimos  Emprestimo[]  // Relação com os empréstimos realizados
 }
