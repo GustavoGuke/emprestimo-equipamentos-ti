@@ -20,7 +20,8 @@ export default function ModalNovoEquipamento({ id, nome, quantidade, onClose, on
     const [open, setOpen] = React.useState(false);
     const [equipmentName, setEquipmentName] = React.useState(nome || "");
     const [quantity, setQuantity] = React.useState(quantidade || 0);
-    console.log(nome, quantidade)
+    const quantityAnterior = quantidade || 0;
+    
 
     useEffect(() => {
         setEquipmentName(nome || "");
@@ -32,11 +33,12 @@ export default function ModalNovoEquipamento({ id, nome, quantidade, onClose, on
             nome: equipmentName.toUpperCase(),
             quantidade: Number(quantity)
         };
+        let  ajuste = quantity - quantityAnterior
 
         try {
             let res
             if (nome || quantidade) {
-                res = await equipamentoUpdate(id!, equipamentData)
+                res = await equipamentoUpdate(id!, equipamentData, ajuste)
                 if (onEquipamentUpdated && res) {
                     onEquipamentUpdated(res);
                 }

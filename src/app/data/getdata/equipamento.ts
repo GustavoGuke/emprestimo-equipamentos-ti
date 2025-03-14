@@ -57,7 +57,7 @@ export async function incrementaQuantidade(id: number){
     }
 }
 
-export async function equipamentoUpdate(id: number, data: any){
+export async function equipamentoUpdate(id: number, data: any, ajuste: number){
     const equipamento = await db.equipamento.update({
         where: {
             id: id
@@ -65,11 +65,12 @@ export async function equipamentoUpdate(id: number, data: any){
         data: {
             ...data, 
             disponivel:{
-                increment: data.quantidade
+                increment: ajuste
             }
         },
         //data: data
     })
+    revalidatePath("Home")
     return equipamento;
 }
 
