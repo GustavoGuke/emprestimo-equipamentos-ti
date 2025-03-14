@@ -5,6 +5,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableFooter
 } from "./ui/table"
 import ModalNovoEquipamento from "./ModalNovoEquipamento";
 
@@ -23,9 +24,10 @@ const columns = [
     header: "Disponível"
   },
   {
-    accessorKey: "status",
-    header: "Status"
+    accessorKey: "alterar",
+    header: "Alterar"
   }
+
 ]
 
 type Equipamento = {
@@ -36,11 +38,15 @@ type Equipamento = {
 }
 
 export function EquipamentosTable({ data }: any) {
-console.log(data)
+  console.log(data)
   return (
     <div className="rounded-md border">
       <Table>
         <TableHeader>
+          <TableRow>
+            <TableHead><ModalNovoEquipamento /></TableHead>
+
+          </TableRow>
           <TableRow>
             {columns.map((column) => (
               <TableHead key={column.accessorKey}>{column.header}</TableHead>
@@ -53,7 +59,7 @@ console.log(data)
               <TableCell>{item.nome}</TableCell>
               <TableCell>{item.quantidade}</TableCell>
               <TableCell>{item.disponivel}</TableCell>
-              <TableCell><ModalNovoEquipamento {...item}/></TableCell>
+              <TableCell><ModalNovoEquipamento {...item} /></TableCell>
             </TableRow>
           ))}
         </TableBody>

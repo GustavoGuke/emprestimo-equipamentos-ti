@@ -67,7 +67,7 @@ export function NovoEquipamento({ getEquipamentos }: any) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="secondary">Emprestar equipamento +</Button>
+                <Button variant="secondary" className="bg-green-500 hover:bg-green-300">Emprestar equipamento +</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader >

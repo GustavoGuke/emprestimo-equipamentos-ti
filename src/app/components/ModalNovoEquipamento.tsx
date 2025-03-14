@@ -10,17 +10,17 @@ import { Equipamento } from "@prisma/client";
 
 type ModalNovoEquipamentoProps = {
     id?: number;
-    nome?:string
+    nome?: string
     quantidade?: number;
-    onClose: () => void;
+    onClose?: () => void;
     onEquipamentUpdated?: (updateEquipament: Equipamento) => void;
 }
 
-export default function ModalNovoEquipamento({ id,nome,quantidade, onClose, onEquipamentUpdated }: ModalNovoEquipamentoProps) {
+export default function ModalNovoEquipamento({ id, nome, quantidade, onClose, onEquipamentUpdated }: ModalNovoEquipamentoProps) {
     const [open, setOpen] = React.useState(false);
     const [equipmentName, setEquipmentName] = React.useState(nome || "");
     const [quantity, setQuantity] = React.useState(quantidade || 0);
-    console.log(nome,quantidade)
+    console.log(nome, quantidade)
 
     useEffect(() => {
         setEquipmentName(nome || "");
@@ -45,7 +45,7 @@ export default function ModalNovoEquipamento({ id,nome,quantidade, onClose, onEq
             }
 
             if (res) {
-                onClose();
+                setOpen(false);
                 setEquipmentName("");
                 setQuantity(0);
             }
@@ -66,8 +66,8 @@ export default function ModalNovoEquipamento({ id,nome,quantidade, onClose, onEq
     //     setQuantity(0);
     // };
     return (
-        <div>
-            <Button type="button" variant="secondary" onClick={() => setOpen(true)} className="bg-blue-400 my-2 ">{id ? "alterar": "Cadastrar equipamento"}</Button>
+        <>
+            <Button type="button" variant="secondary" onClick={() => setOpen(true)} className="bg-blue-400 my-2 ">{id ? "alterar" : "Cadastrar equipamento"}</Button>
             {
                 open &&
                 <>
@@ -98,6 +98,6 @@ export default function ModalNovoEquipamento({ id,nome,quantidade, onClose, onEq
                     </div>
                 </>
             }
-        </div>
+        </>
     )
 }

@@ -4,27 +4,30 @@ import { useState } from "react";
 import { NovoEquipamento } from "./ButtonEmprestar";
 import { EmprestimosTable } from "./EmprestimosTable";
 import { EquipamentosTable } from "./EquipamentosTable";
+import { Button } from "./ui/button";
 
 export default function TelaPrincipal({ getEquipamentos, getEmprestimos }: any) {
     const [mostrarEquipamentos, setMostrarEquipamentos] = useState(false);
 
     return (
         <div>
-            <NovoEquipamento getEquipamentos={getEquipamentos} />
             {/* Botões para alternar entre Equipamentos e Emprestados */}
-            <div className="flex gap-4 mb-6">
-                <button
-                    className={`px-4 py-2 rounded ${!mostrarEquipamentos ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+            <div className="flex justify-between mb-6">
+
+                <NovoEquipamento getEquipamentos={getEquipamentos} />
+
+                <Button
+                    className={`px-4 py-2 rounded hover:bg-blue-700 ${!mostrarEquipamentos ? "bg-blue-500 text-white" : "bg-gray-400"}`}
                     onClick={() => setMostrarEquipamentos(false)}
                 >
                     Ver Emprestados
-                </button>
-                <button
-                    className={`px-4 py-2 rounded ${mostrarEquipamentos ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+                </Button>
+                <Button
+                    className={`px-4 py-2 rounded hover:bg-blue-700 ${mostrarEquipamentos ? "bg-blue-500 text-white" : "bg-gray-400"}`}
                     onClick={() => setMostrarEquipamentos(true)}
                 >
                     Ver Equipamentos
-                </button>
+                </Button>
             </div>
 
 
