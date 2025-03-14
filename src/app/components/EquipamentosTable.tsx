@@ -38,7 +38,7 @@ type Equipamento = {
 }
 
 export function EquipamentosTable({ data }: any) {
-  console.log(data)
+  
   return (
     <div className="rounded-md border">
       <Table>

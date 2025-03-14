@@ -50,7 +50,7 @@ export function NovoEquipamento({ getEquipamentos }: any) {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log({ ...values })
+        
         const equipamentoId = equipamentosQtde.find((equipamento: Equipamento) => equipamento.value === values.nomeEquipamento)?.id
         const novoEmprestimo = {
             nomeEquipamento: values.nomeEquipamento.toLocaleUpperCase(),
