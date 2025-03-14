@@ -12,20 +12,24 @@ type ModalNovoEquipamentoProps = {
     id?: number;
     nome?: string
     quantidade?: number;
+    disponivel?: number;
     onClose?: () => void;
     onEquipamentUpdated?: (updateEquipament: Equipamento) => void;
 }
 
-export default function ModalNovoEquipamento({ id, nome, quantidade, onClose, onEquipamentUpdated }: ModalNovoEquipamentoProps) {
+export default function ModalNovoEquipamento({ id, nome, quantidade, disponivel, onClose, onEquipamentUpdated }: ModalNovoEquipamentoProps) {
     const [open, setOpen] = React.useState(false);
     const [equipmentName, setEquipmentName] = React.useState(nome || "");
     const [quantity, setQuantity] = React.useState(quantidade || 0);
     const quantityAnterior = quantidade || 0;
+    const qtddisponivel = disponivel || 0;
     
 
     useEffect(() => {
         setEquipmentName(nome || "");
         setQuantity(quantidade || 0);
+
+        
     }, [nome, quantidade]);
 
     const handleSave = async () => {
@@ -33,6 +37,16 @@ export default function ModalNovoEquipamento({ id, nome, quantidade, onClose, on
             nome: equipmentName.toUpperCase(),
             quantidade: Number(quantity)
         };
+        if (quantity < 1){
+            alert("A quantidade deve ser maior que 0");
+            return
+        }
+        
+        if (quantity < quantityAnterior - qtddisponivel){
+            
+            alert("A quantidade deve ser maior ou igual a quantidade disponível");
+            return
+        }
         let  ajuste = quantity - quantityAnterior
 
         try {
