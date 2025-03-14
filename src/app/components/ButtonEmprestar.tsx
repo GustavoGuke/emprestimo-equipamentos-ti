@@ -31,7 +31,7 @@ const formSchema = z.object({
 })
 
 export function NovoEquipamento({ getEquipamentos }: any) {
-
+    const [isOpen, setIsOpen] = React.useState(false);
     const equipamentosFormatados = formatarEquipamentos(getEquipamentos)
     const equipamentosQtde = filtrarEquipamentoComQuantidade(equipamentosFormatados)
 
@@ -62,10 +62,11 @@ export function NovoEquipamento({ getEquipamentos }: any) {
         }
         await emprestimoCreatee(novoEmprestimo)
         form.reset();
+        setIsOpen(false)
 
     }
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="secondary" className="bg-green-500 hover:bg-green-300">Emprestar equipamento +</Button>
             </DialogTrigger>
