@@ -4,7 +4,11 @@ import { revalidatePath } from "next/cache";
 
 export async function getEquipamento() {
     try {
-        const equipamento = await db.equipamento.findMany();
+        const equipamento = await db.equipamento.findMany({
+            where: {
+                ativo: true,
+            }
+        });
     if (!equipamento) {
         return [];
     }
@@ -74,11 +78,22 @@ export async function equipamentoUpdate(id: number, data: any, ajuste: number){
     return equipamento;
 }
 
-export async function equipamentoDelete(id: number){
-    const equipamento = await db.equipamento.delete({
-        where: {
-            id: id
-        }
-    })
-    return equipamento;
+export async function equipamentoDelete(data: any){
+    const { id, quantidade, disponivel } = data
+    //if (quantidade === disponivel) {
+        await db.equipamento.update({
+            where: {
+                id: id
+            },
+            data: {
+                ativo: false
+            }
+        })
+        revalidatePath("Home")
+        return true
+    //}
+    
+    return false
+
+   
 }

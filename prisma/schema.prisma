@@ -21,6 +21,7 @@ model Equipamento {
   disponivel   Int           @default(0)// Quantidade disponível para empréstimo
   criadoEm     DateTime      @default(now())
   emprestimos  Emprestimo[]  // Relação com os empréstimos realizados
+  ativo      Boolean       @default(true)
 }
 
 model Emprestimo {
@@ -39,5 +40,5 @@ model Emprestimo {
 
   // Relacionamento com o equipamento emprestado
   equipamentoId          Int
-  equipamento            Equipamento @relation(fields: [equipamentoId], references: [id])
+  equipamento            Equipamento @relation(fields: [equipamentoId], references: [id], onDelete: Cascade)
 }
