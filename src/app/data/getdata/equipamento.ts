@@ -80,7 +80,7 @@ export async function equipamentoUpdate(id: number, data: any, ajuste: number){
 
 export async function equipamentoDelete(data: any){
     const { id, quantidade, disponivel } = data
-    //if (quantidade === disponivel) {
+    if (quantidade === disponivel) {
         await db.equipamento.update({
             where: {
                 id: id
@@ -91,7 +91,7 @@ export async function equipamentoDelete(data: any){
         })
         revalidatePath("Home")
         return true
-    //}
+    }
     
     return false
 
